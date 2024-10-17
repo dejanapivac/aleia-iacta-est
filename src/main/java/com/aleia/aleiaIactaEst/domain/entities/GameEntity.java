@@ -22,7 +22,10 @@ public class GameEntity {
     private String title;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "player_id")
+    @JoinTable(
+            name = "game_id",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "game_id"))
 //    @JoinTable(
 //            name = "game_player", // Name of the join table
 //            joinColumns = @JoinColumn(name = "game_id"), // Foreign key column in the join table for GameEntity

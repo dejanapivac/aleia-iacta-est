@@ -16,6 +16,7 @@ public class PlayerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "player_id_sequence")
-    private Long id;
+    private Integer id;
+
     private String name;
 }

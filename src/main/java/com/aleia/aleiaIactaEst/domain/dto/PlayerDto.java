@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PlayerDto {
 
-    private Long id;
+    private Integer id;
+
     private String name;
 }
