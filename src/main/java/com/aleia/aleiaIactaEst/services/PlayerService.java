@@ -14,4 +14,8 @@ public interface PlayerService {
     Optional<PlayerEntity> findOne(Integer id);
 
     boolean exists(Integer id);
+
+    void delete(Integer id);
+
+    PlayerEntity partialUpdate(Integer id, PlayerEntity playerEntity);
 }

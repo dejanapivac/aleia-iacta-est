@@ -1,7 +1,10 @@
 package com.aleia.aleiaIactaEst;
 
+import com.aleia.aleiaIactaEst.domain.dto.GameDto;
 import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
+
+import java.util.Set;
 
 public class TestDataUtil {
 
@@ -19,6 +22,13 @@ public class TestDataUtil {
         return PlayerDto.builder()
                 .id(1)
                 .name("Cora")
+                .build();
+    }
+
+    public static GameDto createTestGameA() {
+        return GameDto.builder()
+                .id(1)
+                .title("D&D")
                 .build();
     }
 }

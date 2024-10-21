@@ -32,7 +32,6 @@ public class PlayerServiceImpl implements PlayerService {
                 .collect(Collectors.toList());
     }
 
-    //TODO
     @Override
     public Optional<PlayerEntity> findOne(Integer id) {
         return playerRepository.findById(id);
@@ -41,5 +40,21 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public boolean exists(Integer id) {
         return playerRepository.existsById(id);
+    }
+
+    @Override
+    public PlayerEntity partialUpdate(Integer id, PlayerEntity playerEntity) {
+
+        playerEntity.setId(id);
+
+        return playerRepository.findById(id).map(existingPlayer -> {
+            Optional.ofNullable(playerEntity.getName()).ifPresent(existingPlayer::setName);
+            return playerRepository.save(existingPlayer);
+        }).orElseThrow(() -> new RuntimeException("Author does not exist"));
+    }
+
+    @Override
+    public void delete(Integer id) {
+        playerRepository.deleteById(id);
     }
 }

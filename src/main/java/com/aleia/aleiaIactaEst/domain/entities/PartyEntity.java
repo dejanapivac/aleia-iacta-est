@@ -6,19 +6,24 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
-@Table(name = "players")
-public class PlayerEntity {
+@Builder
+@Table(name = "party")
+public class PartyEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "player_id_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "party_id_sequence")
     private Integer id;
 
     private String name;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<PlayerEntity> players;
 }

@@ -4,7 +4,6 @@ import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
 import com.aleia.aleiaIactaEst.mappers.Mapper;
 import com.aleia.aleiaIactaEst.services.PlayerService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,4 +65,26 @@ public class PlayerController {
         );
     }
 
+    @PatchMapping("/players/{id}")
+    public ResponseEntity<PlayerDto> partialUpdate(
+            @PathVariable("id") Integer id,
+            @RequestBody PlayerDto playerDto) {
+
+        if(!playerService.exists(id)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        PlayerEntity playerEntity = playerMapper.mapFrom(playerDto);
+        PlayerEntity updatedPlayer = playerService.partialUpdate(id, playerEntity);
+        return new ResponseEntity<>(
+                playerMapper.mapTo(updatedPlayer),
+                HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/players/{id}")
+    public ResponseEntity deletePlayer(@PathVariable("id") Integer id) {
+
+        playerService.delete(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }

@@ -173,4 +173,34 @@ public class PlayerControllerIntegrationTests {
         assertThat(updatedPlayerName).isEqualTo(playerDto.getName());
     }
 
+    @Test
+    public void testThatPartialUpdatePlayerReturnsPlayer() throws Exception {
+        PlayerEntity playerEntity = TestDataUtil.createTestPlayerEntityA();
+        PlayerEntity savedPlayer = playerService.save(playerEntity);
+
+        PlayerDto playerDto = TestDataUtil.createTestPlayerDtoA();
+        playerDto.setName("Ansel");
+        String playerJson = objectMapper.writeValueAsString(playerDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/players/" + savedPlayer.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(savedPlayer.getId())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value("Ansel")
+        );
+    }
+
+    @Test
+    public void testThatDeletePlayerReturnsHttpStatus204ForExistingPlayer() throws Exception {
+        PlayerEntity playerEntity = TestDataUtil.createTestPlayerEntityA();
+        PlayerEntity savedPlayer = playerService.save(playerEntity);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/players/" + savedPlayer.getId())
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
 }

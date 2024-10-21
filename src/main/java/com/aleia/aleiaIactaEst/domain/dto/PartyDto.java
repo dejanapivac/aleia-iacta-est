@@ -11,9 +11,11 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PlayerDto {
+public class PartyDto {
 
     private Integer id;
 
     private String name;
+
+    private Set<PlayerDto> players;
 }

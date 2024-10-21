@@ -22,7 +22,6 @@ public class PlayerMapperImpl implements Mapper<PlayerEntity, PlayerDto> {
 
     @Override
     public PlayerEntity mapFrom(PlayerDto playerDto) {
-
         return modelMapper.map(playerDto, PlayerEntity.class);
     }
 }
