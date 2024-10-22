@@ -6,14 +6,10 @@ import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
 import com.aleia.aleiaIactaEst.services.PlayerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -22,20 +18,12 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RequiredArgsConstructor
 public class PlayerControllerIntegrationTests extends IntegrationTestBase {
 
-    public PlayerService playerService;
+    private final PlayerService playerService;
 
-    private MockMvc mockMvc;
-
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    public PlayerControllerIntegrationTests(MockMvc mockMvc, PlayerService playerService) {
-        this.mockMvc = mockMvc;
-        this.playerService = playerService;
-        this.objectMapper = new ObjectMapper();
-    }
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void testThatCreatePlayerSuccessfullyReturnsHttp201Status() throws Exception {

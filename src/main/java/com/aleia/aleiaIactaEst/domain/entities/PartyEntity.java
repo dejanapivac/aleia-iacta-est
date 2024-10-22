@@ -24,6 +24,7 @@ public class PartyEntity {
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "party_players", joinColumns = @JoinColumn(name = "party_id"), inverseJoinColumns = @JoinColumn(name = "player_id"))
     private Set<PlayerEntity> players;
 }

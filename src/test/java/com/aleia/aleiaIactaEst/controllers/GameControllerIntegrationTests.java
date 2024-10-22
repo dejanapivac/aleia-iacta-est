@@ -1,11 +1,13 @@
 package com.aleia.aleiaIactaEst.controllers;
 
+import com.aleia.aleiaIactaEst.IntegrationTestBase;
 import com.aleia.aleiaIactaEst.TestDataUtil;
 import com.aleia.aleiaIactaEst.domain.dto.GameDto;
 import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
 import com.aleia.aleiaIactaEst.domain.entities.GameEntity;
 import com.aleia.aleiaIactaEst.services.GameService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,23 +19,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@AutoConfigureMockMvc
-public class GameControllerIntegrationTests {
+@RequiredArgsConstructor
+public class GameControllerIntegrationTests extends IntegrationTestBase {
 
-    private MockMvc mockMvc;
+    private final GameService gameService;
 
-    private GameService gameService;
-
-    private ObjectMapper objectMapper;
-
-    public GameControllerIntegrationTests(MockMvc mockMvc, GameService gameService) {
-        this.mockMvc = mockMvc;
-        this.gameService = gameService;
-        this.objectMapper = new ObjectMapper();
-    }
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void testThatGetCreateGameReturnsHttpStatus201Created() throws Exception {
