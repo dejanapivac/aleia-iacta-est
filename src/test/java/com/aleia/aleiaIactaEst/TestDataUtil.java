@@ -28,6 +28,13 @@ public class TestDataUtil {
                 .build();
     }
 
+    public static PlayerEntity createTestPlayerEntityC() {
+        return PlayerEntity.builder()
+                .id(3)
+                .name("Dell")
+                .build();
+    }
+
     public static PlayerDto createTestPlayerDtoA() {
         return PlayerDto.builder()
                 .id(1)
@@ -39,6 +46,14 @@ public class TestDataUtil {
         return PartyEntity.builder()
                 .id(1)
                 .name("Skvadrica")
+                .players(players)
+                .build();
+    }
+
+    public static PartyEntity createTestPartyEntityB(Set<PlayerEntity> players) {
+        return PartyEntity.builder()
+                .id(1)
+                .name("D&D drustvance")
                 .players(players)
                 .build();
     }

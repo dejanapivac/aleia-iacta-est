@@ -4,19 +4,17 @@ import com.aleia.aleiaIactaEst.IntegrationTestBase;
 import com.aleia.aleiaIactaEst.TestDataUtil;
 import com.aleia.aleiaIactaEst.domain.entities.PartyEntity;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
-import com.aleia.aleiaIactaEst.repositories.PlayerRepository;
 import com.aleia.aleiaIactaEst.services.PlayerService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 
 @RequiredArgsConstructor
 public class PartyControllerIntegrationTests extends IntegrationTestBase {
@@ -26,19 +24,11 @@ public class PartyControllerIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void testThatCreatePartyReturnsHttpStatusCode201Created() throws Exception {
-        PlayerEntity playerEntity = TestDataUtil.createTestPlayerEntityA();
-        playerEntity.setId(null);
-        PlayerEntity savedPlayerA = playerService.save(playerEntity);
+        PlayerEntity playerEntity = createPlayer(TestDataUtil.createTestPlayerEntityA());
 
-        PlayerEntity playerEntity2 = TestDataUtil.createTestPlayerEntityB();
-        playerEntity2.setId(null);
-        PlayerEntity savedPlayerB = playerService.save(playerEntity2);
+        Set<PlayerEntity> players = Set.of(playerEntity);
 
-
-        Set<PlayerEntity> players = Set.of(savedPlayerA, savedPlayerB);
-
-        PartyEntity partyEntity = TestDataUtil.createTestPartyEntityA(players);
-        partyEntity.setId(null);
+        PartyEntity partyEntity = createParty(players);
         String partyJson = objectMapper.writeValueAsString(partyEntity);
 
         mockMvc.perform(
@@ -47,4 +37,65 @@ public class PartyControllerIntegrationTests extends IntegrationTestBase {
                         .content(partyJson)
         ).andExpect(MockMvcResultMatchers.status().isCreated());
     }
+
+    @Test
+    public void testThatCreatePartyReturnsCreatedParty() throws Exception {
+        PlayerEntity playerA = createPlayer(TestDataUtil.createTestPlayerEntityA());
+        PlayerEntity playerB = createPlayer(TestDataUtil.createTestPlayerEntityB());
+
+        Set<PlayerEntity> partySet = Set.of(playerA, playerB);
+        PartyEntity party = createParty(partySet);
+
+        String partyEntityJson = objectMapper.writeValueAsString(party);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/party")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(partyEntityJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value("Skvadrica")
+        ).andExpect(MockMvcResultMatchers.jsonPath("$.players[*].id").value(
+                org.hamcrest.Matchers.containsInAnyOrder(
+                        party.getPlayers().stream().map(PlayerEntity::getId).toArray(Integer[]::new)
+                )
+        )).andExpect(MockMvcResultMatchers.jsonPath("$.players[*].name").value(
+                org.hamcrest.Matchers.containsInAnyOrder(
+                        party.getPlayers().stream().map(PlayerEntity::getName).toArray(String[]::new)
+                )
+        ));
+    }
+
+    @Test
+    public void testThatListPartiesReturnsHttpStatus200() throws Exception {
+//        PlayerEntity playerA = createPlayer(TestDataUtil.createTestPlayerEntityA());
+//        PlayerEntity playerB = createPlayer(TestDataUtil.createTestPlayerEntityB());
+//        PlayerEntity playerC = createPlayer(TestDataUtil.createTestPlayerEntityC());
+//
+//        Set<PlayerEntity> partySetA = Set.of(playerA, playerB);
+//        Set<PlayerEntity> partySetB = Set.of(playerB, playerC);
+//
+//        PartyEntity partyA = createParty(partySetA);
+//        PartyEntity partyB = createParty(partySetB);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/party")
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    private PlayerEntity createPlayer(PlayerEntity player) {
+        player.setId(null);
+
+        return playerService.save(player);
+    }
+
+    private PartyEntity createParty(Set<PlayerEntity> players) {
+        PartyEntity partyEntity = TestDataUtil.createTestPartyEntityA(players);
+        partyEntity.setId(null);
+
+        return partyEntity;
+    }
+
+//    private
 }
