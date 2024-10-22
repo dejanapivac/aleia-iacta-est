@@ -1,5 +1,6 @@
 package com.aleia.aleiaIactaEst.controllers;
 
+import com.aleia.aleiaIactaEst.IntegrationTestBase;
 import com.aleia.aleiaIactaEst.TestDataUtil;
 import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
@@ -21,11 +22,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@AutoConfigureMockMvc
-public class PlayerControllerIntegrationTests {
+public class PlayerControllerIntegrationTests extends IntegrationTestBase {
 
     public PlayerService playerService;
 

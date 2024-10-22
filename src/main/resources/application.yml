@@ -9,7 +9,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -18,7 +18,7 @@ spring:
         format_sql: true
         default_schema: game
     show-sql: true
-#  flyway:
-#    schemas: game
+  flyway:
+    schemas: game
   main:
     web-application-type: servlet

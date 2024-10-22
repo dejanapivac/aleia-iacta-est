@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/players")
 public class PlayerController {
 
     private PlayerService playerService;
@@ -24,14 +25,14 @@ public class PlayerController {
         this.playerMapper = playerMapper;
     }
 
-    @PostMapping(path = "/players")
+    @PostMapping
     public ResponseEntity<PlayerDto> createPlayer(@RequestBody PlayerDto player) {
         PlayerEntity playerEntity = playerMapper.mapFrom(player);
         PlayerEntity savedPlayerEntity = playerService.save(playerEntity);
         return new ResponseEntity<>(playerMapper.mapTo(savedPlayerEntity), HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/players")
+    @GetMapping
     public List<PlayerDto> listPlayers() {
         List<PlayerEntity> players = playerService.findAll();
         return players.stream()
@@ -39,7 +40,7 @@ public class PlayerController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/players/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<PlayerDto> getPlayer(@PathVariable("id") Integer id) {
         Optional<PlayerEntity> foundPlayer = playerService.findOne(id);
         return foundPlayer.map(playerEntity -> {
@@ -48,7 +49,7 @@ public class PlayerController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping(path = "/players/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<PlayerDto> fullUpdatePlayer(
             @PathVariable("id") Integer id,
             @RequestBody PlayerDto playerDto) {
@@ -65,7 +66,7 @@ public class PlayerController {
         );
     }
 
-    @PatchMapping("/players/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<PlayerDto> partialUpdate(
             @PathVariable("id") Integer id,
             @RequestBody PlayerDto playerDto) {
@@ -81,7 +82,7 @@ public class PlayerController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/players/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity deletePlayer(@PathVariable("id") Integer id) {
 
         playerService.delete(id);
