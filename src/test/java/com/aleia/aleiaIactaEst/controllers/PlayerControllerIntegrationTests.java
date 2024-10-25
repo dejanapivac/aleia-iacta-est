@@ -8,9 +8,7 @@ import com.aleia.aleiaIactaEst.services.PlayerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -115,8 +113,12 @@ public class PlayerControllerIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void testThatUpdatePlayerReturnsHttpStatus404IfPlayerDoesntExist() throws Exception {
+        PlayerDto playerDto = new PlayerDto();
+        String playerDtoJson = objectMapper.writeValueAsString(playerDto);
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/player/32")
+                MockMvcRequestBuilders.put("/players/32")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerDtoJson)
         ).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 

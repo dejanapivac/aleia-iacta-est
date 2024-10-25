@@ -4,6 +4,8 @@ import com.aleia.aleiaIactaEst.domain.entities.PartyEntity;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
 import com.aleia.aleiaIactaEst.repositories.PlayerRepository;
 import com.aleia.aleiaIactaEst.services.PlayerService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,18 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public PlayerEntity save(PlayerEntity playerEntity) {
         return playerRepository.save(playerEntity);
+    }
+
+    @Override
+    public Optional<PlayerEntity> update(PlayerEntity playerEntity, Integer playerEntityId) {
+        if(!exists(playerEntityId)) {
+            return Optional.empty();
+        }
+
+        playerEntity.setId(playerEntityId);
+
+        var player = playerRepository.save(playerEntity);
+        return Optional.of(player);
     }
 
     @Override

@@ -24,7 +24,7 @@ public class PartyEntity {
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name = "party_players", joinColumns = @JoinColumn(name = "party_id"), inverseJoinColumns = @JoinColumn(name = "player_id"))
     private Set<PlayerEntity> players;
 }

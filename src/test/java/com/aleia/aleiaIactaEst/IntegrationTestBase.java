@@ -1,6 +1,7 @@
 package com.aleia.aleiaIactaEst;
 
 
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,6 +21,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IntegrationTestBase {
 
     @ServiceConnection
@@ -33,5 +35,4 @@ public class IntegrationTestBase {
 
     @Autowired
     protected MockMvc mockMvc;
-
 }

@@ -20,4 +20,6 @@ public interface PlayerService {
     void delete(Integer id);
 
     PlayerEntity partialUpdate(Integer id, PlayerEntity playerEntity);
+
+    Optional<PlayerEntity> update(PlayerEntity playerEntity, Integer playerEntityId);
 }

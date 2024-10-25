@@ -5,13 +5,23 @@ import com.aleia.aleiaIactaEst.domain.dto.PartyDto;
 import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
 import com.aleia.aleiaIactaEst.domain.entities.PartyEntity;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
+import com.aleia.aleiaIactaEst.repositories.PartyRepository;
+import com.aleia.aleiaIactaEst.repositories.PlayerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Set;
 
+@Component
 public class TestDataUtil {
 
-    private TestDataUtil() {
+    private final PlayerRepository playerRepository;
+    private final PartyRepository partyRepository;
+
+    @Autowired
+    public TestDataUtil(PlayerRepository playerRepository, PartyRepository partyRepository) {
+        this.playerRepository = playerRepository;
+        this.partyRepository = partyRepository;
     }
 
     public static PlayerEntity createTestPlayerEntityA() {
@@ -54,6 +64,29 @@ public class TestDataUtil {
         return PartyEntity.builder()
                 .id(1)
                 .name("D&D drustvance")
+                .players(players)
+                .build();
+    }
+
+    public PlayerEntity savePlayer(PlayerEntity player) {
+        return playerRepository.save(player);
+    }
+
+    public PartyEntity createParty() {
+        PlayerEntity playerA = savePlayer(createTestPlayerEntityA());
+        PlayerEntity playerB = savePlayer(createTestPlayerEntityB());
+        PlayerEntity playerC = savePlayer(createTestPlayerEntityC());
+        Set<PlayerEntity> players = Set.of(playerA, playerB, playerC);
+
+        PartyEntity party = createTestPartyEntityA(players);
+
+        return partyRepository.save(party);
+    }
+
+    public static PartyDto createTestPartyDtoA(Set<PlayerDto> players) {
+        return PartyDto.builder()
+                .id(1)
+                .name("D&D Dto")
                 .players(players)
                 .build();
     }
