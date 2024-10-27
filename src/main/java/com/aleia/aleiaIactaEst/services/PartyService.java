@@ -22,4 +22,6 @@ public interface PartyService {
     Optional<PartyEntity> deletePlayers(Set<Integer> playersToDelete, Integer partyId);
 
     Optional<PartyEntity> update(PartyEntity party, Integer partyId);
+
+    Optional<Integer> delete(Integer partyId);
 }

@@ -71,7 +71,19 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     public Optional<PartyEntity> update(PartyEntity party, Integer partyId) {
-        return partyRepository.findById(partyId)
-                .map(existingParty -> partyRepository.save(party));
+        return partyRepository.findById(partyId).map(existingParty -> {
+            existingParty.setId(partyId);
+            existingParty.setName(party.getName());
+            return partyRepository.save(existingParty);
+        });
+    }
+
+    @Override
+    public Optional<Integer> delete(Integer partyId) {
+        Optional<PartyEntity> partyToDelete = partyRepository.findById(partyId);
+        return partyToDelete.map(partyEntity -> {
+            partyRepository.delete(partyEntity);
+            return partyId;
+        });
     }
 }

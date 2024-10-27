@@ -3,6 +3,7 @@ package com.aleia.aleiaIactaEst;
 import com.aleia.aleiaIactaEst.domain.dto.GameDto;
 import com.aleia.aleiaIactaEst.domain.dto.PartyDto;
 import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
+import com.aleia.aleiaIactaEst.domain.entities.GameEntity;
 import com.aleia.aleiaIactaEst.domain.entities.PartyEntity;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
 import com.aleia.aleiaIactaEst.repositories.PartyRepository;
@@ -10,6 +11,7 @@ import com.aleia.aleiaIactaEst.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Component
@@ -106,10 +108,12 @@ public class TestDataUtil {
                 )).build();
     }
 
-    public static GameDto createTestGameA() {
-        return GameDto.builder()
+    public static GameEntity createTestGameA() {
+        return GameEntity.builder()
                 .id(1)
                 .title("D&D")
+                .createdAt(LocalDateTime.now())
                 .build();
     }
+
 }

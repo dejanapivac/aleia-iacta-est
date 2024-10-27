@@ -2,18 +2,15 @@ package com.aleia.aleiaIactaEst.services;
 
 import com.aleia.aleiaIactaEst.IntegrationTestBase;
 import com.aleia.aleiaIactaEst.TestDataUtil;
-import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
 import com.aleia.aleiaIactaEst.domain.entities.PartyEntity;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
 import com.aleia.aleiaIactaEst.repositories.PartyRepository;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.BDDAssertions.then;
@@ -71,6 +68,16 @@ public class PartyServiceTests extends IntegrationTestBase {
         then(expectedParty.getName()).isEqualTo("Grupica");
     }
 
+    @Test
+    public void testThatDeletePartyDeletesParty() {
+        PartyEntity party = testDataUtil.createParty();
+
+        partyService.delete(party.getId());
+
+        Optional<PartyEntity> deletedParty = partyRepository.findById(party.getId());
+        then(deletedParty).isEmpty();
+    }
+
     private PlayerEntity createPlayer(PlayerEntity player) {
         player.setId(null);
 
@@ -83,6 +90,4 @@ public class PartyServiceTests extends IntegrationTestBase {
 
         return partyService.save(partyEntity);
     }
-
-
 }

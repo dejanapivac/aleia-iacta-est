@@ -24,11 +24,13 @@ public class GameControllerIntegrationTests extends IntegrationTestBase {
 
     private final GameService gameService;
 
+    private final TestDataUtil testDataUtil;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void testThatGetCreateGameReturnsHttpStatus201Created() throws Exception {
-        GameDto gameDto = TestDataUtil.createTestGameA();
+        GameDto gameDto = testDataUtil.createTestGameA();
         String gameJson = objectMapper.writeValueAsString(gameDto);
 
         mockMvc.perform(

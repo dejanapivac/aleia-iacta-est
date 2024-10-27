@@ -27,5 +27,5 @@ public class GameEntity {
 
     @OneToOne
     @JoinColumn(name = "party_id")
-    private PartyEntity players;
+    private PartyEntity party;
 }
