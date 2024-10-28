@@ -85,11 +85,14 @@ public class TestDataUtil {
         return partyRepository.save(party);
     }
 
-    public static PartyDto createTestPartyDtoA(Set<PlayerDto> players) {
-        return PartyDto.builder()
+    public static PartyEntity createTestPartyEntityA() {
+        return PartyEntity.builder()
                 .id(1)
                 .name("D&D Dto")
-                .players(players)
+                .players(Set.of(PlayerEntity.builder()
+                        .id(1)
+                        .name("Cora")
+                        .build()))
                 .build();
     }
 
@@ -104,15 +107,36 @@ public class TestDataUtil {
                         PlayerDto.builder()
                                 .id(2)
                                 .name("Roscoe")
-                                .build()
-                )).build();
+                                .build()))
+                .build();
     }
 
+    //TODO
+    // jel oke da bude ovako null na pocetku dok testiram
     public static GameEntity createTestGameA() {
         return GameEntity.builder()
                 .id(1)
                 .title("D&D")
                 .createdAt(LocalDateTime.now())
+                .party(null)
+                .build();
+    }
+
+    public static GameEntity createTestGameB() {
+        return GameEntity.builder()
+                .id(2)
+                .title("Ekipica")
+                .createdAt(LocalDateTime.now())
+                .party(null)
+                .build();
+    }
+
+    public static GameDto createTestGameDtoA() {
+        return GameDto.builder()
+                .id(1)
+                .title("Skvadron")
+                .createdAt(LocalDateTime.now())
+                .partyDtoId(createTestPartyDtoA().getId())
                 .build();
     }
 

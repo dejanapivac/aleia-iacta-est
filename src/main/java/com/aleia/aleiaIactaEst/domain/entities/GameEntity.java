@@ -1,5 +1,6 @@
 package com.aleia.aleiaIactaEst.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,8 @@ public class GameEntity {
 
     private String title;
 
+    @Column(name = "created_at")
+//    @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss", timezone="Europe/Zagreb")
     private LocalDateTime createdAt;
 
     @OneToOne
