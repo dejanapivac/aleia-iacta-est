@@ -10,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
@@ -46,14 +48,17 @@ public class PartyServiceTests extends IntegrationTestBase {
     @Test
     public void testThatRemovePlayersRemovesPlayers() {
 //        nije instanca klase, staticka klasa
-        var party = testDataUtil.createParty();
-
-        Set<Integer> playersToDelete = Set.of(1, 3);
-
+        PartyEntity party = testDataUtil.createParty();
+        Set<PlayerEntity> players = party.getPlayers();
+        PlayerEntity firstPlayer = players.stream().findFirst().get();
+        Set<Integer> playersToDelete = players.stream()
+                .map(PlayerEntity::getId)
+                .filter(id -> !Objects.equals(id, firstPlayer.getId()))
+                .collect(Collectors.toSet());
         partyService.deletePlayers(playersToDelete, party.getId());
 
         PartyEntity expectedParty = partyRepository.findById(party.getId()).get();
-        then(expectedParty.getPlayers().stream().map(PlayerEntity::getId)).isEqualTo(List.of(2));
+        then(expectedParty.getPlayers().stream().map(PlayerEntity::getId)).isEqualTo(List.of(firstPlayer.getId()));
     }
 
     @Test

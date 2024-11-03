@@ -95,7 +95,7 @@ public class PartyControllerIntegrationTests extends IntegrationTestBase {
         PlayerEntity playerEntityC = createPlayer(TestDataUtil.createTestPlayerEntityC());
 
         Set<PlayerEntity> players = Set.of(playerEntityB, playerEntityA);
-        Set<PlayerEntity> playersB = Set.of(playerEntityC, playerEntityB);
+        Set<PlayerEntity> playersB = Set.of(playerEntityB, playerEntityC);
 
         PartyEntity party = createParty(players);
         PartyEntity partyB = createPartyB(playersB);
@@ -118,7 +118,7 @@ public class PartyControllerIntegrationTests extends IntegrationTestBase {
         PartyEntity party = createParty(players);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/party/1")
+                MockMvcRequestBuilders.get("/party/" + party.getId())
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -131,27 +131,30 @@ public class PartyControllerIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void testThatUpdatePartyReturnsHttpStatus404IfPartyDoesntExist() throws Exception {
-        PartyDto partyDto = new PartyDto();
-        String partyDtoJson = objectMapper.writeValueAsString(partyDto);
+        PlayerEntity playerEntity = createPlayer(TestDataUtil.createTestPlayerEntityB());
+        Set<PlayerEntity> newPlayersSet = Set.of(playerEntity);
+        String newPlayersJson = objectMapper.writeValueAsString(newPlayersSet);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/party/44")
+                MockMvcRequestBuilders.put("/party/44/addPlayers")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(partyDtoJson)
+                        .content(newPlayersJson)
         ).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
-    public void testThatUpdatePlayerReturnsHttpStatus200IfPlayerExists() throws Exception {
+    public void testThatUpdatePartyReturnsHttpStatus200IfPartyExists() throws Exception {
         PlayerEntity savedPlayer = createPlayer(TestDataUtil.createTestPlayerEntityA());
         Set<PlayerEntity> players = Set.of(savedPlayer);
         PartyEntity partyEntity = createParty(players);
-        String partyEntityJson = objectMapper.writeValueAsString(partyEntity);
+        PlayerEntity newPlayer = createPlayer(TestDataUtil.createTestPlayerEntityB());
+        Set<PlayerEntity> newPlayersSet = Set.of(newPlayer);
+        String playerEntityJson = objectMapper.writeValueAsString(newPlayersSet);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/party/1")
+                MockMvcRequestBuilders.put("/party/" + partyEntity.getId() + "/addPlayers")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(partyEntityJson)
+                        .content(playerEntityJson)
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -175,11 +178,6 @@ public class PartyControllerIntegrationTests extends IntegrationTestBase {
 
         return playerService.save(player);
     }
-
-//    private PlayerDto createPlayerDto(PlayerDto player) {
-//        player.setId(null);
-//
-//    }
 
     private PartyEntity createParty(Set<PlayerEntity> players) {
         PartyEntity partyEntity = TestDataUtil.createTestPartyEntityA(players);

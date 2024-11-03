@@ -59,9 +59,7 @@ public class PartyController {
 
     @PutMapping("/{id}/addPlayers")
     public ResponseEntity<PartyDto> addPlayers(@PathVariable("id") Integer partyId, @RequestBody Set<PlayerDto> playerDtos) {
-        Set<PlayerEntity> playerEntities = playerDtos.stream().map(playerDto -> {
-            return playerMapper.mapFrom(playerDto);
-        }).collect(Collectors.toSet());
+        Set<PlayerEntity> playerEntities = playerDtos.stream().map(playerDto -> playerMapper.mapFrom(playerDto)).collect(Collectors.toSet());
         Optional<PartyEntity> updatedParty = partyService.addPlayers(playerEntities, partyId);
         return updatedParty.map(partyEntity -> {
             PartyDto updatedPartyDto = partyMapper.mapTo(partyEntity);
@@ -82,7 +80,7 @@ public class PartyController {
     public ResponseEntity<PartyDto> partialUpdate(@PathVariable("id") Integer id, @RequestBody PartyDto partyDto) {
         PartyEntity partyEntity = partyMapper.mapFrom(partyDto);
         Optional<PartyEntity> savedPartyEntity = partyService.update(partyEntity, id);
-        return savedPartyEntity.map(updatedParty ->{
+        return savedPartyEntity.map(updatedParty -> {
             PartyDto updatedPartyDto = partyMapper.mapTo(updatedParty);
             return new ResponseEntity<>(updatedPartyDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

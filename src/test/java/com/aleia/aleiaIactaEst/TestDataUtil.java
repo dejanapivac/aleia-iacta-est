@@ -6,6 +6,9 @@ import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
 import com.aleia.aleiaIactaEst.domain.entities.GameEntity;
 import com.aleia.aleiaIactaEst.domain.entities.PartyEntity;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
+import com.aleia.aleiaIactaEst.domain.entities.RollEntity;
+import com.aleia.aleiaIactaEst.domain.enums.DiceRollOption;
+import com.aleia.aleiaIactaEst.repositories.GameRepository;
 import com.aleia.aleiaIactaEst.repositories.PartyRepository;
 import com.aleia.aleiaIactaEst.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +23,13 @@ public class TestDataUtil {
     private final PlayerRepository playerRepository;
     private final PartyRepository partyRepository;
 
+    private final GameRepository gameRepository;
+
     @Autowired
-    public TestDataUtil(PlayerRepository playerRepository, PartyRepository partyRepository) {
+    public TestDataUtil(PlayerRepository playerRepository, PartyRepository partyRepository, GameRepository gameRepository) {
         this.playerRepository = playerRepository;
         this.partyRepository = partyRepository;
+        this.gameRepository = gameRepository;
     }
 
     public static PlayerEntity createTestPlayerEntityA() {
@@ -74,15 +80,41 @@ public class TestDataUtil {
         return playerRepository.save(player);
     }
 
+    public GameEntity saveGame(GameEntity game) {
+        return gameRepository.save(game);
+    }
+
     public PartyEntity createParty() {
-        PlayerEntity playerA = savePlayer(createTestPlayerEntityA());
-        PlayerEntity playerB = savePlayer(createTestPlayerEntityB());
-        PlayerEntity playerC = savePlayer(createTestPlayerEntityC());
+        PlayerEntity playerA = createTestPlayerEntityA();
+        playerA.setId(null);
+        playerRepository.save(playerA);
+        PlayerEntity playerB = createTestPlayerEntityB();
+        playerB.setId(null);
+        playerRepository.save(playerB);
+        PlayerEntity playerC = createTestPlayerEntityC();
+        playerC.setId(null);
+        playerRepository.save(playerC);
         Set<PlayerEntity> players = Set.of(playerA, playerB, playerC);
 
         PartyEntity party = createTestPartyEntityA(players);
+        party.setId(null);
 
         return partyRepository.save(party);
+    }
+
+    public RollEntity prepareRollState() {
+        PlayerEntity playerA = savePlayer(createTestPlayerEntityA());
+        PartyEntity partyEntity = createParty();
+        GameEntity gameEntity = createFullTestGameA();
+        gameEntity.setParty(partyEntity);
+        saveGame(gameEntity);
+
+        return RollEntity.builder()
+                .id(1)
+                .player(playerA)
+                .game(gameEntity)
+                .diceRollOption(null)
+                .build();
     }
 
     public static PartyEntity createTestPartyEntityA() {
@@ -122,6 +154,15 @@ public class TestDataUtil {
                 .build();
     }
 
+    public static GameEntity createFullTestGameA() {
+        return GameEntity.builder()
+                .id(1)
+                .title("Full game")
+                .createdAt(LocalDateTime.now())
+                .party(createTestPartyEntityA())
+                .build();
+    }
+
     public static GameEntity createTestGameB() {
         return GameEntity.builder()
                 .id(2)
@@ -140,4 +181,12 @@ public class TestDataUtil {
                 .build();
     }
 
+    public static RollEntity crateTestRollEntityA() {
+        return RollEntity.builder()
+                .id(1)
+                .player(createTestPlayerEntityA())
+                .game(createFullTestGameA())
+                .diceRollOption(DiceRollOption.TWENTY)
+                .build();
+    }
 }

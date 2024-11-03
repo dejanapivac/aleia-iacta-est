@@ -36,8 +36,10 @@ public class GameServiceTests extends IntegrationTestBase {
     @Test
     public void testThatGetGamesReturnsAllGames() {
         GameEntity gameEntityA = TestDataUtil.createTestGameA();
+        gameEntityA.setId(null);
         gameService.save(gameEntityA);
         GameEntity gameEntityB = TestDataUtil.createTestGameB();
+        gameEntityB.setId(null);
         gameService.save(gameEntityB);
 
         List<GameEntity> games = gameService.list();
@@ -48,6 +50,7 @@ public class GameServiceTests extends IntegrationTestBase {
     @Test
     public void testThatFindGameReturnsThatGameIfItExists() {
         GameEntity gameEntity = TestDataUtil.createTestGameA();
+        gameEntity.setId(null);
         gameService.save(gameEntity);
 
         Optional<GameEntity> expectedGame = gameRepository.findById(gameEntity.getId());
@@ -55,8 +58,9 @@ public class GameServiceTests extends IntegrationTestBase {
     }
 
     @Test
-    public void testTharUpdateGameUpdatesGameIfItExists() {
+    public void testThatUpdateGameUpdatesGameIfItExists() {
         GameEntity gameEntity = TestDataUtil.createTestGameA();
+        gameEntity.setId(null);
         gameService.save(gameEntity);
 
         String newTitle = "Konan barbarin";

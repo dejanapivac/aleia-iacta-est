@@ -17,6 +17,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RequiredArgsConstructor
+
 public class PlayerControllerIntegrationTests extends IntegrationTestBase {
 
     private final PlayerService playerService;
@@ -80,10 +81,11 @@ public class PlayerControllerIntegrationTests extends IntegrationTestBase {
     @Test
     public void testThatGetPlayerReturnsHttpStatus200IfPlayerExists() throws Exception {
         PlayerEntity testPlayerEntity = TestDataUtil.createTestPlayerEntityA();
-        playerService.save(testPlayerEntity);
+        testPlayerEntity.setId(null);
+        Integer givenId = playerService.save(testPlayerEntity).getId();
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/players/1")
+                MockMvcRequestBuilders.get("/players/" + givenId)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
                 MockMvcResultMatchers.status().isOk()
@@ -93,10 +95,11 @@ public class PlayerControllerIntegrationTests extends IntegrationTestBase {
     @Test
     public void testThatGetPlayerReturnsThatPlayer() throws Exception {
         PlayerEntity testPlayerEntity = TestDataUtil.createTestPlayerEntityA();
-        playerService.save(testPlayerEntity);
+        testPlayerEntity.setId(null);
+        Integer givenId = playerService.save(testPlayerEntity).getId();
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/players/" + testPlayerEntity.getId())
+                MockMvcRequestBuilders.get("/players/" + givenId)
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").isNumber()
         ).andExpect(
