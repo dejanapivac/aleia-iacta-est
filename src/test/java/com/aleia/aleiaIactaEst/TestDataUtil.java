@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -103,15 +104,17 @@ public class TestDataUtil {
     }
 
     public RollEntity prepareRollState() {
-        PlayerEntity playerA = savePlayer(createTestPlayerEntityA());
         PartyEntity partyEntity = createParty();
         GameEntity gameEntity = createFullTestGameA();
+        gameEntity.setId(null);
         gameEntity.setParty(partyEntity);
         saveGame(gameEntity);
 
+        PlayerEntity player = partyEntity.getPlayers().stream().findFirst().get();
+
         return RollEntity.builder()
                 .id(1)
-                .player(playerA)
+                .player(player)
                 .game(gameEntity)
                 .diceRollOption(null)
                 .build();
@@ -143,8 +146,6 @@ public class TestDataUtil {
                 .build();
     }
 
-    //TODO
-    // jel oke da bude ovako null na pocetku dok testiram
     public static GameEntity createTestGameA() {
         return GameEntity.builder()
                 .id(1)
@@ -176,8 +177,7 @@ public class TestDataUtil {
         return GameDto.builder()
                 .id(1)
                 .title("Skvadron")
-                .createdAt(LocalDateTime.now())
-                .partyDtoId(createTestPartyDtoA().getId())
+                .partyId(createTestPartyDtoA().getId())
                 .build();
     }
 

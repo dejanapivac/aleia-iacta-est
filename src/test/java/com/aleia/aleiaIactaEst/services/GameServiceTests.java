@@ -27,10 +27,10 @@ public class GameServiceTests extends IntegrationTestBase {
     @Test
     public void testThatCreateGameCreatesAGame() {
         GameEntity gameEntity = TestDataUtil.createTestGameA();
-        gameService.save(gameEntity);
+        GameEntity savedGame = gameService.save(gameEntity);
 
-        GameEntity expectedGame = gameRepository.findById(gameEntity.getId()).get();
-        then(expectedGame.getTitle()).isEqualTo("D&D");
+        GameEntity expectedGame = gameRepository.findById(savedGame.getId()).get();
+        then(expectedGame).isEqualTo(savedGame);
     }
 
     @Test
@@ -68,5 +68,16 @@ public class GameServiceTests extends IntegrationTestBase {
         gameService.update(gameEntity, gameEntity.getId());
         Optional<GameEntity> expectedGame = gameRepository.findById(gameEntity.getId());
         then(expectedGame.get().getTitle()).isEqualTo(newTitle);
+    }
+
+    @Test
+    public void testThatDeleteGameDeletesThatGame() {
+        GameEntity gameEntity = TestDataUtil.createTestGameA();
+        gameEntity.setId(null);
+        GameEntity savedGame = gameService.save(gameEntity);
+
+        gameService.delete(savedGame.getId());
+        Optional<GameEntity> expectedGame = gameService.findById(savedGame.getId());
+        then(expectedGame).isEmpty();
     }
 }

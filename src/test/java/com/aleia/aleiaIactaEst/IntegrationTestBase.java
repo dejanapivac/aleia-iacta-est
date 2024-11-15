@@ -1,6 +1,10 @@
 package com.aleia.aleiaIactaEst;
 
 
+import com.aleia.aleiaIactaEst.repositories.GameRepository;
+import com.aleia.aleiaIactaEst.repositories.PartyRepository;
+import com.aleia.aleiaIactaEst.repositories.PlayerRepository;
+import com.aleia.aleiaIactaEst.repositories.RollRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +22,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @SpringBootTest(classes = {AleiaIactaEstApplication.class})
 @ActiveProfiles("test")
@@ -28,6 +36,11 @@ import java.util.List;
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IntegrationTestBase {
+
+//    private GameRepository gameRepository;
+//    private RollRepository rollRepository;
+//    private PlayerRepository playerRepository;
+//    private PartyRepository partyRepository;
 
     @ServiceConnection
     private static final JdbcDatabaseContainer<?> postgresql = new PostgreSQLContainer<>("postgres:17.0")
@@ -47,9 +60,36 @@ public class IntegrationTestBase {
     @Autowired
     private List<CrudRepository<?,?>> crudRepositories;
 
+    private static final List<Class<? extends JpaRepository<?, ?>>> DB_CLEAR_ORDER =
+            List.of(RollRepository.class, GameRepository.class, PartyRepository.class, PlayerRepository.class);
+
+    private static final Map<Class<? extends CrudRepository<?, ?>>, Integer> DB_CLEAR_ORDER_MAP =
+            DB_CLEAR_ORDER.stream().collect(Collectors.toMap(Function.identity(), DB_CLEAR_ORDER::indexOf));
+
+    private void clearDb() {
+        repositories.stream()
+                .sorted(Comparator.comparingInt(IntegrationTestBase::inDatabaseClearOrder))
+                .forEach(CrudRepository::deleteAll);
+    }
+
+    private static int inDatabaseClearOrder(JpaRepository<?, ?> repository) {
+        return DB_CLEAR_ORDER_MAP.entrySet()
+                .stream()
+                .filter(entry -> entry.getKey().isAssignableFrom(repository.getClass()))
+                .findFirst()
+                .map(Map.Entry::getValue)
+                .orElse(100);
+    }
+
+    //TODO
     @AfterEach
     void afterEach() {
-        repositories.forEach(CrudRepository::deleteAll);
-        crudRepositories.forEach(CrudRepository::deleteAll);
+        clearDb();
+
+//        rollRepository.deleteAll();
+//        gameRepository.deleteAll();
+//        partyRepository.deleteAll();
+//        playerRepository.deleteAll();
     }
+
 }

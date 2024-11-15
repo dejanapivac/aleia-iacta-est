@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -25,7 +26,7 @@ public class GameEntity {
     private String title;
 
     @Column(name = "created_at")
-//    @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss", timezone="Europe/Zagreb")
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @OneToOne
