@@ -1,7 +1,7 @@
 package com.aleia.aleiaIactaEst;
 
 
-import com.aleia.aleiaIactaEst.repositories.GameRepository;
+import com.aleia.aleiaIactaEst.repositories.CampaignRepository;
 import com.aleia.aleiaIactaEst.repositories.PartyRepository;
 import com.aleia.aleiaIactaEst.repositories.PlayerRepository;
 import com.aleia.aleiaIactaEst.repositories.RollRepository;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IntegrationTestBase {
 
-//    private GameRepository gameRepository;
+//    private CampaignRepository campaignRepository;
 //    private RollRepository rollRepository;
 //    private PlayerRepository playerRepository;
 //    private PartyRepository partyRepository;
@@ -61,7 +61,7 @@ public class IntegrationTestBase {
     private List<CrudRepository<?,?>> crudRepositories;
 
     private static final List<Class<? extends JpaRepository<?, ?>>> DB_CLEAR_ORDER =
-            List.of(RollRepository.class, GameRepository.class, PartyRepository.class, PlayerRepository.class);
+            List.of(RollRepository.class, CampaignRepository.class, PartyRepository.class, PlayerRepository.class);
 
     private static final Map<Class<? extends CrudRepository<?, ?>>, Integer> DB_CLEAR_ORDER_MAP =
             DB_CLEAR_ORDER.stream().collect(Collectors.toMap(Function.identity(), DB_CLEAR_ORDER::indexOf));
@@ -87,7 +87,7 @@ public class IntegrationTestBase {
         clearDb();
 
 //        rollRepository.deleteAll();
-//        gameRepository.deleteAll();
+//        campaignRepository.deleteAll();
 //        partyRepository.deleteAll();
 //        playerRepository.deleteAll();
     }

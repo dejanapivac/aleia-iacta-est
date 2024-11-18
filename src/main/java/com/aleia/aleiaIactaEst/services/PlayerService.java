@@ -15,6 +15,8 @@ public interface PlayerService {
 
     Optional<PlayerEntity> findOne(Integer id);
 
+    List<PlayerEntity> findAllByIds(List<Integer> playerIds);
+
     boolean exists(Integer id);
 
     void delete(Integer id);

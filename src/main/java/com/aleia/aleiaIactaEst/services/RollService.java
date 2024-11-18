@@ -9,7 +9,6 @@ public interface RollService {
 
     RollEntity save(RollEntity rollEntity);
 
-
     Optional<RollEntity> findById(Integer id);
 
     List<RollEntity> findAll();

@@ -1,6 +1,5 @@
 package com.aleia.aleiaIactaEst.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,15 +8,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "game")
-public class GameEntity {
+@Table(name = "campaign")
+public class CampaignEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -16,7 +16,7 @@ public class RollDto {
 
     private Integer playerId;
 
-    private Integer gameId;
+    private Integer campaignId;
 
     private DiceRollOption diceRollOption;
 }

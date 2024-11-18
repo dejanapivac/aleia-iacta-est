@@ -1,13 +1,13 @@
 package com.aleia.aleiaIactaEst.services.impl;
 
-import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
 import com.aleia.aleiaIactaEst.domain.entities.PartyEntity;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
+import com.aleia.aleiaIactaEst.services.impl.out.AddPlayersResponse;
 import com.aleia.aleiaIactaEst.repositories.PartyRepository;
 import com.aleia.aleiaIactaEst.services.PartyService;
+import com.aleia.aleiaIactaEst.services.PlayerService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -19,9 +19,10 @@ public class PartyServiceImpl implements PartyService {
 
     private PartyRepository partyRepository;
 
+    private PlayerService playerService;
+
     public PartyServiceImpl(PartyRepository partyRepository) {
         this.partyRepository = partyRepository;
-
     }
 
     @Override
@@ -48,14 +49,18 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
-    public Optional<PartyEntity> addPlayers(Set<PlayerEntity> newPlayersSet, Integer partyId) {
+    public Optional<AddPlayersResponse> addPlayers(List<Integer> newPlayersIds, Integer partyId) {
 //        dohvati mi taj party
 //        ako postoji dodaj novog playera
 //        save party
         Optional<PartyEntity> partyEntity = partyRepository.findById(partyId);
         return partyEntity.map(party -> {
-            party.getPlayers().addAll(newPlayersSet);
-            return partyRepository.save(party);
+            List<PlayerEntity> newPlayers = playerService.findAllByIds(newPlayersIds);
+            if(newPlayers.size() != newPlayersIds.size()) {
+                return new AddPlayersResponse(party, "Not all players present");
+            }
+            party.getPlayers().addAll(newPlayers);
+            return new AddPlayersResponse(party, "All players added");
         });
     }
 

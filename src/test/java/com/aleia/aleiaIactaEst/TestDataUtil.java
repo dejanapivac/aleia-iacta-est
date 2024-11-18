@@ -1,21 +1,20 @@
 package com.aleia.aleiaIactaEst;
 
-import com.aleia.aleiaIactaEst.domain.dto.GameDto;
+import com.aleia.aleiaIactaEst.domain.dto.CampaignDto;
 import com.aleia.aleiaIactaEst.domain.dto.PartyDto;
 import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
-import com.aleia.aleiaIactaEst.domain.entities.GameEntity;
+import com.aleia.aleiaIactaEst.domain.entities.CampaignEntity;
 import com.aleia.aleiaIactaEst.domain.entities.PartyEntity;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
 import com.aleia.aleiaIactaEst.domain.entities.RollEntity;
 import com.aleia.aleiaIactaEst.domain.enums.DiceRollOption;
-import com.aleia.aleiaIactaEst.repositories.GameRepository;
+import com.aleia.aleiaIactaEst.repositories.CampaignRepository;
 import com.aleia.aleiaIactaEst.repositories.PartyRepository;
 import com.aleia.aleiaIactaEst.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -24,13 +23,13 @@ public class TestDataUtil {
     private final PlayerRepository playerRepository;
     private final PartyRepository partyRepository;
 
-    private final GameRepository gameRepository;
+    private final CampaignRepository campaignRepository;
 
     @Autowired
-    public TestDataUtil(PlayerRepository playerRepository, PartyRepository partyRepository, GameRepository gameRepository) {
+    public TestDataUtil(PlayerRepository playerRepository, PartyRepository partyRepository, CampaignRepository campaignRepository) {
         this.playerRepository = playerRepository;
         this.partyRepository = partyRepository;
-        this.gameRepository = gameRepository;
+        this.campaignRepository = campaignRepository;
     }
 
     public static PlayerEntity createTestPlayerEntityA() {
@@ -81,8 +80,8 @@ public class TestDataUtil {
         return playerRepository.save(player);
     }
 
-    public GameEntity saveGame(GameEntity game) {
-        return gameRepository.save(game);
+    public CampaignEntity saveCampaign(CampaignEntity campaign) {
+        return campaignRepository.save(campaign);
     }
 
     public PartyEntity createParty() {
@@ -105,17 +104,17 @@ public class TestDataUtil {
 
     public RollEntity prepareRollState() {
         PartyEntity partyEntity = createParty();
-        GameEntity gameEntity = createFullTestGameA();
-        gameEntity.setId(null);
-        gameEntity.setParty(partyEntity);
-        saveGame(gameEntity);
+        CampaignEntity campaignEntity = createFullTestCampaignA();
+        campaignEntity.setId(null);
+        campaignEntity.setParty(partyEntity);
+        saveCampaign(campaignEntity);
 
         PlayerEntity player = partyEntity.getPlayers().stream().findFirst().get();
 
         return RollEntity.builder()
                 .id(1)
                 .player(player)
-                .game(gameEntity)
+                .campaign(campaignEntity)
                 .diceRollOption(null)
                 .build();
     }
@@ -124,10 +123,16 @@ public class TestDataUtil {
         return PartyEntity.builder()
                 .id(1)
                 .name("D&D Dto")
-                .players(Set.of(PlayerEntity.builder()
-                        .id(1)
-                        .name("Cora")
-                        .build()))
+                .players(Set.of(
+                        PlayerEntity.builder()
+                                .id(1)
+                                .name("Cora")
+                                .build(),
+                        PlayerEntity.builder()
+                                .id(2)
+                                .name("Roscoe")
+                                .build()
+                ))
                 .build();
     }
 
@@ -146,8 +151,8 @@ public class TestDataUtil {
                 .build();
     }
 
-    public static GameEntity createTestGameA() {
-        return GameEntity.builder()
+    public static CampaignEntity createTestCampaignA() {
+        return CampaignEntity.builder()
                 .id(1)
                 .title("D&D")
                 .createdAt(LocalDateTime.now())
@@ -155,17 +160,17 @@ public class TestDataUtil {
                 .build();
     }
 
-    public static GameEntity createFullTestGameA() {
-        return GameEntity.builder()
+    public static CampaignEntity createFullTestCampaignA() {
+        return CampaignEntity.builder()
                 .id(1)
-                .title("Full game")
+                .title("Full campaign")
                 .createdAt(LocalDateTime.now())
                 .party(createTestPartyEntityA())
                 .build();
     }
 
-    public static GameEntity createTestGameB() {
-        return GameEntity.builder()
+    public static CampaignEntity createTestCampaignB() {
+        return CampaignEntity.builder()
                 .id(2)
                 .title("Ekipica")
                 .createdAt(LocalDateTime.now())
@@ -173,8 +178,8 @@ public class TestDataUtil {
                 .build();
     }
 
-    public static GameDto createTestGameDtoA() {
-        return GameDto.builder()
+    public static CampaignDto createTestCampaignDtoA() {
+        return CampaignDto.builder()
                 .id(1)
                 .title("Skvadron")
                 .partyId(createTestPartyDtoA().getId())
@@ -185,7 +190,7 @@ public class TestDataUtil {
         return RollEntity.builder()
                 .id(1)
                 .player(createTestPlayerEntityA())
-                .game(createFullTestGameA())
+                .campaign(createFullTestCampaignA())
                 .diceRollOption(DiceRollOption.TWENTY)
                 .build();
     }

@@ -1,8 +1,7 @@
 package com.aleia.aleiaIactaEst.services;
 
-import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
 import com.aleia.aleiaIactaEst.domain.entities.PartyEntity;
-import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
+import com.aleia.aleiaIactaEst.services.impl.out.AddPlayersResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +16,7 @@ public interface PartyService {
 
     boolean exists(Integer id);
 
-    Optional<PartyEntity> addPlayers(Set<PlayerEntity> newPlayersSet, Integer partyId);
+    Optional<AddPlayersResponse> addPlayers(List<Integer> newPlayerIds, Integer partyId);
 
     Optional<PartyEntity> deletePlayers(Set<Integer> playersToDelete, Integer partyId);
 

@@ -55,6 +55,11 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public List<PlayerEntity> findAllByIds(List<Integer> playerIds) {
+        return playerRepository.findAllById(playerIds);
+    }
+
+    @Override
     public boolean exists(Integer id) {
         return playerRepository.existsById(id);
     }
