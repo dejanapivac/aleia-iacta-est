@@ -6,6 +6,8 @@ import com.aleia.aleiaIactaEst.services.impl.out.AddPlayersResponse;
 import com.aleia.aleiaIactaEst.repositories.PartyRepository;
 import com.aleia.aleiaIactaEst.services.PartyService;
 import com.aleia.aleiaIactaEst.services.PlayerService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,15 +17,12 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
+@AllArgsConstructor
 public class PartyServiceImpl implements PartyService {
 
     private PartyRepository partyRepository;
 
     private PlayerService playerService;
-
-    public PartyServiceImpl(PartyRepository partyRepository) {
-        this.partyRepository = partyRepository;
-    }
 
     @Override
     public PartyEntity save(PartyEntity partyEntity) {
@@ -50,9 +49,6 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     public Optional<AddPlayersResponse> addPlayers(List<Integer> newPlayersIds, Integer partyId) {
-//        dohvati mi taj party
-//        ako postoji dodaj novog playera
-//        save party
         Optional<PartyEntity> partyEntity = partyRepository.findById(partyId);
         return partyEntity.map(party -> {
             List<PlayerEntity> newPlayers = playerService.findAllByIds(newPlayersIds);
@@ -60,6 +56,7 @@ public class PartyServiceImpl implements PartyService {
                 return new AddPlayersResponse(party, "Not all players present");
             }
             party.getPlayers().addAll(newPlayers);
+            partyRepository.save(party);
             return new AddPlayersResponse(party, "All players added");
         });
     }

@@ -27,24 +27,22 @@ public class PartyServiceTests extends IntegrationTestBase {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Test
+    public void testThatAddPlayersAddsPlayersToParty() {
+        PlayerEntity playerA = createPlayer(TestDataUtil.createTestPlayerEntityA());
+        PlayerEntity playerB = createPlayer(TestDataUtil.createTestPlayerEntityB());
+        Set<PlayerEntity> players = Set.of(playerA, playerB);
+        PartyEntity partyEntity = createParty(players);
 
-    //TODO
-//    @Test
-//    public void testThatAddPlayersAddsPlayersToParty() {
-//        PlayerEntity playerA = createPlayer(TestDataUtil.createTestPlayerEntityA());
-//        PlayerEntity playerB = createPlayer(TestDataUtil.createTestPlayerEntityB());
-//        Set<PlayerEntity> players = Set.of(playerA, playerB);
-//        PartyEntity partyEntity = createParty(players);
-//
-//        PlayerEntity playerC = createPlayer(TestDataUtil.createTestPlayerEntityC());
-//        Set<PlayerEntity> newPlayersSet = Set.of(playerC);
-//
-//        partyService.addPlayers(newPlayersSet, partyEntity.getId());
-//
-//        // Posto je test smijem get() jer sigurno postoji taj party (gore sam ga napravila. inace bi morala map()
-//        PartyEntity expectedParty = partyRepository.findById(partyEntity.getId()).get();
-//        then(expectedParty.getPlayers()).isEqualTo(Set.of(playerA, playerB, playerC));
-//    }
+        PlayerEntity playerC = createPlayer(TestDataUtil.createTestPlayerEntityC());
+        List<Integer> newPlayersIds = List.of(playerC.getId());
+
+        partyService.addPlayers(newPlayersIds, partyEntity.getId());
+
+        // Posto je test smijem get() jer sigurno postoji taj party (gore sam ga napravila. inace bi morala map()
+        PartyEntity expectedParty = partyRepository.findById(partyEntity.getId()).get();
+        then(expectedParty.getPlayers()).containsExactlyInAnyOrder(playerA, playerB, playerC);
+    }
 
     @Test
     public void testThatRemovePlayersRemovesPlayers() {

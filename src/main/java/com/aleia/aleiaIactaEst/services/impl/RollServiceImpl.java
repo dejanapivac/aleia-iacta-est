@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class RollServiceImpl implements RollService {
 
-    private RollRepository rollRepository;
+    private final RollRepository rollRepository;
 
     public RollServiceImpl(RollRepository rollRepository) {
         this.rollRepository = rollRepository;
@@ -35,5 +35,14 @@ public class RollServiceImpl implements RollService {
     @Override
     public void delete(Integer id) {
         rollRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<RollEntity> edit(RollEntity rollEntity, Integer id) {
+        Optional<RollEntity> expectedRoll = rollRepository.findById(id);
+        return expectedRoll.map(roll -> {
+            roll.setDiceRollOption(rollEntity.getDiceRollOption());
+            return rollRepository.save(roll);
+        });
     }
 }

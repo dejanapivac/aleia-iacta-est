@@ -168,9 +168,6 @@ public class PartyControllerIntegrationTests extends IntegrationTestBase {
         PlayerDto newPlayer = TestDataUtil.createTestPlayerDtoA();
         Set<PlayerDto> newPlayersSet = Set.of(newPlayer);
         String newPlayersJson = objectMapper.writeValueAsString(newPlayersSet);
-
-
-
     }
 
     private PlayerEntity createPlayer(PlayerEntity player) {

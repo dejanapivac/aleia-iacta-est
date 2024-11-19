@@ -3,14 +3,12 @@ package com.aleia.aleiaIactaEst;
 import com.aleia.aleiaIactaEst.domain.dto.CampaignDto;
 import com.aleia.aleiaIactaEst.domain.dto.PartyDto;
 import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
-import com.aleia.aleiaIactaEst.domain.entities.CampaignEntity;
-import com.aleia.aleiaIactaEst.domain.entities.PartyEntity;
-import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
-import com.aleia.aleiaIactaEst.domain.entities.RollEntity;
+import com.aleia.aleiaIactaEst.domain.entities.*;
 import com.aleia.aleiaIactaEst.domain.enums.DiceRollOption;
 import com.aleia.aleiaIactaEst.repositories.CampaignRepository;
 import com.aleia.aleiaIactaEst.repositories.PartyRepository;
 import com.aleia.aleiaIactaEst.repositories.PlayerRepository;
+import com.aleia.aleiaIactaEst.repositories.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,26 +20,27 @@ public class TestDataUtil {
 
     private final PlayerRepository playerRepository;
     private final PartyRepository partyRepository;
-
     private final CampaignRepository campaignRepository;
+    private final SessionRepository sessionRepository;
 
     @Autowired
-    public TestDataUtil(PlayerRepository playerRepository, PartyRepository partyRepository, CampaignRepository campaignRepository) {
+    public TestDataUtil(PlayerRepository playerRepository, PartyRepository partyRepository, CampaignRepository campaignRepository, SessionRepository sessionRepository) {
         this.playerRepository = playerRepository;
         this.partyRepository = partyRepository;
         this.campaignRepository = campaignRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     public static PlayerEntity createTestPlayerEntityA() {
         return PlayerEntity.builder()
-                .id(1)
+                .id(null)
                 .name("Cora")
                 .build();
     }
 
     public static PlayerEntity createTestPlayerEntityB() {
         return PlayerEntity.builder()
-                .id(2)
+                .id(null)
                 .name("Roscoe")
                 .build();
     }
@@ -83,6 +82,12 @@ public class TestDataUtil {
     public CampaignEntity saveCampaign(CampaignEntity campaign) {
         return campaignRepository.save(campaign);
     }
+    public SessionEntity saveSession(SessionEntity session) {
+        return sessionRepository.save(session);
+    }
+    public PartyEntity saveParty(PartyEntity party) {
+        return partyRepository.save(party);
+    }
 
     public PartyEntity createParty() {
         PlayerEntity playerA = createTestPlayerEntityA();
@@ -103,18 +108,30 @@ public class TestDataUtil {
     }
 
     public RollEntity prepareRollState() {
-        PartyEntity partyEntity = createParty();
-        CampaignEntity campaignEntity = createFullTestCampaignA();
+        PlayerEntity playerA = savePlayer(createTestPlayerEntityA());
+        PlayerEntity playerB = savePlayer(createTestPlayerEntityB());
+        Set<PlayerEntity> players = Set.of(playerA, playerB);
+
+        PartyEntity partyEntity = createTestPartyEntityA();
+        partyEntity.setId(null);
+        partyEntity.setPlayers(players);
+        PartyEntity savedParty = saveParty(partyEntity);
+
+        CampaignEntity campaignEntity = createTestCampaignB();
         campaignEntity.setId(null);
-        campaignEntity.setParty(partyEntity);
-        saveCampaign(campaignEntity);
+        campaignEntity.setParty(savedParty);
+        CampaignEntity savedCampaign = saveCampaign(campaignEntity);
+
+        SessionEntity session = createSessionEntity();
+        session.setCampaign(savedCampaign);
+        SessionEntity savedSession = saveSession(session);
 
         PlayerEntity player = partyEntity.getPlayers().stream().findFirst().get();
 
         return RollEntity.builder()
                 .id(1)
                 .player(player)
-                .campaign(campaignEntity)
+                .session(savedSession)
                 .diceRollOption(null)
                 .build();
     }
@@ -122,17 +139,8 @@ public class TestDataUtil {
     public static PartyEntity createTestPartyEntityA() {
         return PartyEntity.builder()
                 .id(1)
-                .name("D&D Dto")
-                .players(Set.of(
-                        PlayerEntity.builder()
-                                .id(1)
-                                .name("Cora")
-                                .build(),
-                        PlayerEntity.builder()
-                                .id(2)
-                                .name("Roscoe")
-                                .build()
-                ))
+                .name("D&D grupica")
+                .players(null)
                 .build();
     }
 
@@ -171,8 +179,8 @@ public class TestDataUtil {
 
     public static CampaignEntity createTestCampaignB() {
         return CampaignEntity.builder()
-                .id(2)
-                .title("Ekipica")
+                .id(null)
+                .title("Phandelver and Below")
                 .createdAt(LocalDateTime.now())
                 .party(null)
                 .build();
@@ -186,12 +194,21 @@ public class TestDataUtil {
                 .build();
     }
 
-    public static RollEntity crateTestRollEntityA() {
-        return RollEntity.builder()
-                .id(1)
-                .player(createTestPlayerEntityA())
-                .campaign(createFullTestCampaignA())
-                .diceRollOption(DiceRollOption.TWENTY)
+    //TODO moze li null
+    public static SessionEntity createSessionEntity() {
+        return SessionEntity.builder()
+                .id(null)
+                .campaign(null)
+                .playedAt(LocalDateTime.now())
                 .build();
     }
+
+//    public static RollEntity crateTestRollEntityA() {
+//        return RollEntity.builder()
+//                .id(1)
+//                .player(createTestPlayerEntityA())
+//                .campaign(createFullTestCampaignA())
+//                .diceRollOption(DiceRollOption.TWENTY)
+//                .build();
+//    }
 }

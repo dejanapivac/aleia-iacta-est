@@ -26,8 +26,8 @@ public class RollEntity {
     private PlayerEntity player;
 
     @ManyToOne
-    @JoinColumn(name = "campaign_id")
-    private CampaignEntity campaign;
+    @JoinColumn(name = "session_id")
+    private SessionEntity session;
 
     @Enumerated
     @Column(name = "roll_option", columnDefinition = "roll_option")

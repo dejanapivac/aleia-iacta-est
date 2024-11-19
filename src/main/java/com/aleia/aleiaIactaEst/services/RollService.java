@@ -14,4 +14,6 @@ public interface RollService {
     List<RollEntity> findAll();
 
     void delete(Integer id);
+
+    Optional<RollEntity> edit(RollEntity rollEntity, Integer id);
 }

@@ -77,7 +77,10 @@ public class RollServiceTests extends IntegrationTestBase {
         rollEntity.setDiceRollOption(DiceRollOption.ONE);
         RollEntity savedRoll = rollRepository.save(rollEntity);
 
+        savedRoll.setDiceRollOption(DiceRollOption.TWENTY);
+        rollService.edit(savedRoll, savedRoll.getId());
 
-
+        RollEntity expectedRoll = rollService.findById(savedRoll.getId()).get();
+        then(expectedRoll.getDiceRollOption()).isEqualTo(DiceRollOption.TWENTY);
     }
 }

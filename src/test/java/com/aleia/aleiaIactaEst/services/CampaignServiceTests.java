@@ -27,6 +27,8 @@ public class CampaignServiceTests extends IntegrationTestBase {
 
     private final PartyRepository partyRepository;
 
+    private final TestDataUtil testDataUtil;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
@@ -90,14 +92,13 @@ public class CampaignServiceTests extends IntegrationTestBase {
     public void testThatGetPlayerAttendsGetsPlayersAttends() {
         CampaignEntity campaignEntity = TestDataUtil.createTestCampaignA();
         campaignEntity.setId(null);
-        PartyEntity party = TestDataUtil.createTestPartyEntityA();
+        PartyEntity party = testDataUtil.createParty();
         party.setId(null);
-        PartyEntity savedParty = partyRepository.save(party);
+        PartyEntity savedParty = testDataUtil.saveParty(party);
         campaignEntity.setParty(savedParty);
         campaignRepository.save(campaignEntity);
         CampaignEntity expectedCampaign = campaignService.findById(campaignEntity.getId()).get();
         PlayerEntity player = expectedCampaign.getParty().getPlayers().stream().findFirst().get();
-
 
         Integer playerAttends = campaignService.getPlayerAttends(player.getId());
     }
