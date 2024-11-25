@@ -54,7 +54,7 @@ public class RollController {
         Optional<RollEntity> expectedRoll = rollService.findById(id);
         return expectedRoll.map(rollEntity -> {
             Integer rollEntityId = rollEntity.getId();
-            rollService.delete(rollEntityId);
+            rollService.deleteById(rollEntityId);
             return id;
         });
     }

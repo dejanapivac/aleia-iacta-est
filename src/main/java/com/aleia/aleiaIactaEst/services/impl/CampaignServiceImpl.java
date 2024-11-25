@@ -45,7 +45,7 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void deleteById(Integer id) {
         campaignRepository.deleteById(id);
     }
 

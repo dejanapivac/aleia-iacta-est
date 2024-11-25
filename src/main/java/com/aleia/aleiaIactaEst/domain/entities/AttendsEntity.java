@@ -2,6 +2,7 @@ package com.aleia.aleiaIactaEst.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,16 +10,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "attends")
 public class AttendsEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @EmbeddedId
+    private AttendsEntityId id;
 
     @OneToOne
+    @MapsId("playerId")
     @JoinColumn(name = "player_id")
     private PlayerEntity player;
 
-    private Boolean attended;
+    @OneToOne
+    @MapsId("sessionId")
+    @JoinColumn(name = "session_id")
+    private SessionEntity session;
+
+    private Boolean attend;
 }

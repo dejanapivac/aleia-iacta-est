@@ -83,7 +83,7 @@ public class CampaignServiceTests extends IntegrationTestBase {
         campaignEntity.setId(null);
         CampaignEntity savedCampaign = campaignService.save(campaignEntity);
 
-        campaignService.delete(savedCampaign.getId());
+        campaignService.deleteById(savedCampaign.getId());
         Optional<CampaignEntity> expectedCampaign = campaignService.findById(savedCampaign.getId());
         then(expectedCampaign).isEmpty();
     }

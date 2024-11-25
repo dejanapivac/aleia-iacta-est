@@ -76,7 +76,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void deleteById(Integer id) {
         playerRepository.deleteById(id);
     }
 }

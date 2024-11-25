@@ -15,7 +15,7 @@ public interface CampaignService {
 
     Optional<CampaignEntity> update(CampaignEntity campaignEntity, Integer id);
 
-    void delete(Integer id);
+    void deleteById(Integer id);
 
     Integer getPlayerAttends(Integer id);
 }

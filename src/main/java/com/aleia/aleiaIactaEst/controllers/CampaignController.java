@@ -65,7 +65,7 @@ public class CampaignController {
         Optional<CampaignEntity> campaignEntity = campaignService.findById(id);
         return campaignEntity.map(expectedCampaign -> {
             Integer expectedCampaignId = expectedCampaign.getId();
-            campaignService.delete(expectedCampaignId);
+            campaignService.deleteById(expectedCampaignId);
             return id;
         });
     }

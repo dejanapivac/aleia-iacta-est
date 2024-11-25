@@ -1,5 +1,6 @@
 package com.aleia.aleiaIactaEst.services.impl;
 
+import com.aleia.aleiaIactaEst.domain.entities.AttendsEntity;
 import com.aleia.aleiaIactaEst.domain.entities.SessionEntity;
 import com.aleia.aleiaIactaEst.repositories.SessionRepository;
 import com.aleia.aleiaIactaEst.services.SessionService;
@@ -22,17 +23,12 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public List<SessionEntity> listSessions() {
-        return sessionRepository.findAll();
-    }
-
-    @Override
     public Optional<SessionEntity> findById(Integer id) {
         return sessionRepository.findById(id);
     }
 
     @Override
-    public Optional<SessionEntity> updateSession(Integer id) {
-        return Optional.empty();
+    public void deleteById(Integer id) {
+        sessionRepository.deleteById(id);
     }
 }

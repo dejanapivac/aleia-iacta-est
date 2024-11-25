@@ -80,7 +80,7 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
-    public Optional<Integer> delete(Integer partyId) {
+    public Optional<Integer> deleteById(Integer partyId) {
         Optional<PartyEntity> partyToDelete = partyRepository.findById(partyId);
         return partyToDelete.map(partyEntity -> {
             partyRepository.delete(partyEntity);

@@ -1,10 +1,7 @@
 package com.aleia.aleiaIactaEst;
 
 
-import com.aleia.aleiaIactaEst.repositories.CampaignRepository;
-import com.aleia.aleiaIactaEst.repositories.PartyRepository;
-import com.aleia.aleiaIactaEst.repositories.PlayerRepository;
-import com.aleia.aleiaIactaEst.repositories.RollRepository;
+import com.aleia.aleiaIactaEst.repositories.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,11 +34,6 @@ import java.util.stream.Collectors;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IntegrationTestBase {
 
-//    private CampaignRepository campaignRepository;
-//    private RollRepository rollRepository;
-//    private PlayerRepository playerRepository;
-//    private PartyRepository partyRepository;
-
     @ServiceConnection
     private static final JdbcDatabaseContainer<?> postgresql = new PostgreSQLContainer<>("postgres:17.0")
             .withReuse(true)
@@ -55,13 +47,13 @@ public class IntegrationTestBase {
     protected MockMvc mockMvc;
 
     @Autowired
-    private List<JpaRepository<?,?>> repositories;
+    private List<JpaRepository<?, ?>> repositories;
 
     @Autowired
-    private List<CrudRepository<?,?>> crudRepositories;
+    private List<CrudRepository<?, ?>> crudRepositories;
 
     private static final List<Class<? extends JpaRepository<?, ?>>> DB_CLEAR_ORDER =
-            List.of(RollRepository.class, CampaignRepository.class, PartyRepository.class, PlayerRepository.class);
+            List.of(RollRepository.class, SessionRepository.class, CampaignRepository.class, PartyRepository.class, PlayerRepository.class);
 
     private static final Map<Class<? extends CrudRepository<?, ?>>, Integer> DB_CLEAR_ORDER_MAP =
             DB_CLEAR_ORDER.stream().collect(Collectors.toMap(Function.identity(), DB_CLEAR_ORDER::indexOf));

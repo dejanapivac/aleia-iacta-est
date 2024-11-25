@@ -22,5 +22,5 @@ public interface PartyService {
 
     Optional<PartyEntity> update(PartyEntity party, Integer partyId);
 
-    Optional<Integer> delete(Integer partyId);
+    Optional<Integer> deleteById(Integer partyId);
 }

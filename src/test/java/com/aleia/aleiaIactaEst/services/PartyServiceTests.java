@@ -76,7 +76,7 @@ public class PartyServiceTests extends IntegrationTestBase {
     public void testThatDeletePartyDeletesParty() {
         PartyEntity party = testDataUtil.createParty();
 
-        partyService.delete(party.getId());
+        partyService.deleteById(party.getId());
 
         Optional<PartyEntity> deletedParty = partyRepository.findById(party.getId());
         then(deletedParty).isEmpty();

@@ -1,5 +1,6 @@
 package com.aleia.aleiaIactaEst.services;
 
+import com.aleia.aleiaIactaEst.domain.entities.AttendsEntity;
 import com.aleia.aleiaIactaEst.domain.entities.SessionEntity;
 
 import java.util.List;
@@ -9,9 +10,7 @@ public interface SessionService {
 
     SessionEntity save(SessionEntity session);
 
-    List<SessionEntity> listSessions();
-
     Optional<SessionEntity> findById(Integer id);
 
-    Optional<SessionEntity> updateSession(Integer id);
+    void deleteById(Integer id);
 }

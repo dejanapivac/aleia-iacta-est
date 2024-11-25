@@ -33,7 +33,7 @@ public class RollServiceImpl implements RollService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void deleteById(Integer id) {
         rollRepository.deleteById(id);
     }
 

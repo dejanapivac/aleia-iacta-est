@@ -13,7 +13,7 @@ public interface RollService {
 
     List<RollEntity> findAll();
 
-    void delete(Integer id);
+    void deleteById(Integer id);
 
     Optional<RollEntity> edit(RollEntity rollEntity, Integer id);
 }

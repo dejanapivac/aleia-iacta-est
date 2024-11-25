@@ -90,7 +90,7 @@ public class PartyController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Integer> deleteParty(@PathVariable("id") Integer partyId) {
-        Optional<Integer> expectedPartyId = partyService.delete(partyId);
+        Optional<Integer> expectedPartyId = partyService.deleteById(partyId);
         return expectedPartyId.map(party -> {
             return new ResponseEntity<>(party, HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

@@ -4,7 +4,6 @@ import com.aleia.aleiaIactaEst.domain.dto.CampaignDto;
 import com.aleia.aleiaIactaEst.domain.dto.PartyDto;
 import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
 import com.aleia.aleiaIactaEst.domain.entities.*;
-import com.aleia.aleiaIactaEst.domain.enums.DiceRollOption;
 import com.aleia.aleiaIactaEst.repositories.CampaignRepository;
 import com.aleia.aleiaIactaEst.repositories.PartyRepository;
 import com.aleia.aleiaIactaEst.repositories.PlayerRepository;
@@ -82,6 +81,7 @@ public class TestDataUtil {
     public CampaignEntity saveCampaign(CampaignEntity campaign) {
         return campaignRepository.save(campaign);
     }
+
     public SessionEntity saveSession(SessionEntity session) {
         return sessionRepository.save(session);
     }
@@ -168,19 +168,19 @@ public class TestDataUtil {
                 .build();
     }
 
-    public static CampaignEntity createFullTestCampaignA() {
-        return CampaignEntity.builder()
-                .id(1)
-                .title("Full campaign")
-                .createdAt(LocalDateTime.now())
-                .party(createTestPartyEntityA())
-                .build();
-    }
-
     public static CampaignEntity createTestCampaignB() {
         return CampaignEntity.builder()
                 .id(null)
                 .title("Phandelver and Below")
+                .createdAt(LocalDateTime.now())
+                .party(null)
+                .build();
+    }
+
+    public static CampaignEntity createTestCampaignC() {
+        return CampaignEntity.builder()
+                .id(null)
+                .title("Vecna")
                 .createdAt(LocalDateTime.now())
                 .party(null)
                 .build();
@@ -200,6 +200,32 @@ public class TestDataUtil {
                 .id(null)
                 .campaign(null)
                 .playedAt(LocalDateTime.now())
+                .build();
+    }
+
+    public AttendsEntity createAttend() {
+        return  AttendsEntity.builder()
+                .id(null)
+                .session(null)
+                .player(null)
+                .attend(null)
+                .build();
+    }
+
+    public AttendsEntity createFullAttend() {
+        PartyEntity party = createParty();
+        CampaignEntity campaign = TestDataUtil.createTestCampaignB();
+        campaign.setParty(party);
+        CampaignEntity savedCampaign = saveCampaign(campaign);
+        SessionEntity session = TestDataUtil.createSessionEntity();
+        session.setCampaign(savedCampaign);
+        SessionEntity savedSession = saveSession(session);
+
+        return AttendsEntity.builder()
+                .id(new AttendsEntityId(savedSession.getId(), party.getPlayers().stream().findFirst().get().getId()))
+                .session(savedSession)
+                .attend(false)
+                .player(party.getPlayers().stream().findFirst().get())
                 .build();
     }
 

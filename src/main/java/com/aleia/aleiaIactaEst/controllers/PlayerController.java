@@ -3,7 +3,6 @@ package com.aleia.aleiaIactaEst.controllers;
 import com.aleia.aleiaIactaEst.domain.dto.PlayerDto;
 import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
 import com.aleia.aleiaIactaEst.mappers.Mapper;
-import com.aleia.aleiaIactaEst.repositories.PlayerRepository;
 import com.aleia.aleiaIactaEst.services.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -84,7 +83,7 @@ public class PlayerController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deletePlayer(@PathVariable("id") Integer id) {
 
-        playerService.delete(id);
+        playerService.deleteById(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

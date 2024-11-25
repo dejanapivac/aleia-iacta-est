@@ -2,13 +2,11 @@ package com.aleia.aleiaIactaEst.services;
 
 import com.aleia.aleiaIactaEst.IntegrationTestBase;
 import com.aleia.aleiaIactaEst.TestDataUtil;
-import com.aleia.aleiaIactaEst.domain.entities.PlayerEntity;
 import com.aleia.aleiaIactaEst.domain.entities.RollEntity;
 import com.aleia.aleiaIactaEst.domain.enums.DiceRollOption;
 import com.aleia.aleiaIactaEst.repositories.RollRepository;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -65,7 +63,7 @@ public class RollServiceTests extends IntegrationTestBase {
         rollEntity.setId(null);
         rollEntity.setDiceRollOption(DiceRollOption.ONE);
         RollEntity savedRoll = rollRepository.save(rollEntity);
-        rollService.delete(savedRoll.getId());
+        rollService.deleteById(savedRoll.getId());
         Optional<RollEntity> expectedRoll = rollService.findById(savedRoll.getId());
         then(expectedRoll).isEmpty();
     }
