@@ -60,6 +60,7 @@ public class PartyServiceTests extends IntegrationTestBase {
         then(expectedParty.getPlayers().stream().map(PlayerEntity::getId)).isEqualTo(List.of(firstPlayer.getId()));
     }
 
+    // TODO NANI - ovdje create party i ne saveam uopce
     @Test
     public void testThatUpdatePartyReturnsUpdatedParty() {
         PartyEntity party = testDataUtil.createParty();

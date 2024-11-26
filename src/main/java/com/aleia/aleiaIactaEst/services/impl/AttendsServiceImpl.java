@@ -1,6 +1,7 @@
 package com.aleia.aleiaIactaEst.services.impl;
 
 import com.aleia.aleiaIactaEst.domain.entities.AttendsEntity;
+import com.aleia.aleiaIactaEst.domain.entities.AttendsEntityId;
 import com.aleia.aleiaIactaEst.repositories.AttendsRepository;
 import com.aleia.aleiaIactaEst.services.AttendsService;
 import lombok.AllArgsConstructor;
@@ -31,13 +32,22 @@ public class AttendsServiceImpl implements AttendsService {
     }
 
     @Override
+    public List<AttendsEntity> findByPlayerId(Integer playerId) {
+        return attendsRepository.findByPlayerId(playerId);
+    }
+
+    @Override
     public void deleteBySessionIdAndPlayerId(Integer sessionId, Integer playerId) {
         Optional<AttendsEntity> expectedAttend = attendsRepository.findBySessionIdAndPlayerId(sessionId, playerId);
         expectedAttend.ifPresent(attendsRepository::delete);
     }
 
     @Override
-    public Optional<AttendsEntity> updateBySessionIdAndPlayerId(Integer sessionId, Integer playerId) {
-        return Optional.empty();
+    public Optional<AttendsEntity> updateBySessionIdAndPlayerId(AttendsEntity newAttend, AttendsEntityId attendId) {
+        Optional<AttendsEntity> expectedEntity = attendsRepository.findById(attendId);
+        return expectedEntity.map(attend -> {
+            attend.setAttend(newAttend.getAttend());
+            return attendsRepository.save(attend);
+        });
     }
 }
